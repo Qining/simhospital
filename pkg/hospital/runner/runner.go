@@ -360,7 +360,8 @@ func (h *Hospital) processItems(ctx context.Context, f func() (bool, error), has
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
-		case <-time.After(h.sleepFor):
+		//case <-time.After(h.sleepFor):
+		default:
 			// Process everything that is due now.
 			for {
 				ran, err := f()
