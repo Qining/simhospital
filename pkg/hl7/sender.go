@@ -15,6 +15,7 @@
 package hl7
 
 import (
+	"encoding/base64"
 	"bytes"
 	"fmt"
 	"net"
@@ -172,7 +173,8 @@ func NewFileSender(destFilename string) (Sender, error) {
 
 // Send sends a message to the file.
 func (s *fileSender) Send(message []byte) error {
-	if _, err := s.file.Write(append(message, []byte("\n\n")...)); err != nil {
+	line := `{ "data": "` + base64.StdEncoding.EncodeToString(message) + `" }` + "\n"
+	if _, err := s.file.Write(line); err != nil {
 		return errors.Wrap(err, "cannot write a message")
 	}
 	s.count++
